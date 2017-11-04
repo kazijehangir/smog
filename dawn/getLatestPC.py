@@ -14,11 +14,11 @@ def scrapeArticles(thread_num):
         print('Starting thread', thread_num)
     try:
         start = int(open('done_pc_' + str(thread_num) + '.txt', 'r')
-                        .read().split()[-1].strip())
+                        .read().split('\n')[-1].strip())
     except Exception as e:
         print('Exception', e)
         start = 128113
-    done = open('done_pc_' + str(thread_num) + '.txt', 'a')
+    done = open('done_pc_' + str(thread_num) + '.txt', 'a', 0)
 
     outfile = open('dawn_articles_pc_' + str(thread_num) +
                    '.json', 'a')
