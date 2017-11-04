@@ -36,13 +36,13 @@ def scrapeArticles(thread_num):
             author = soup.find('span', attrs={'class': 'story__byline'}).text
             date = soup.find('span', attrs={'class': 'story__time'}).text
         except Exception as e:
-            # with printLock:
-            #     print('Exception', e)
+            with printLock:
+                print(id, 'Exception', e)
             continue
 
         json.dump(
             {id: {'article': article, 'title': title, 'author': author,
-                'date': date}},
+                  'date': date}},
             outfile)
         outfile.write('\n')
         done.write(str(start))
