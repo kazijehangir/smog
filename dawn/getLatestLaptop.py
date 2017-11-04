@@ -13,19 +13,19 @@ def scrapeArticles(thread_num):
     with printLock:
         print('Starting thread', thread_num)
     try:
-        start = int(open('done_pc_' + str(thread_num) + '.txt', 'r')
+        start = int(open('done_laptop_' + str(thread_num) + '.txt', 'r')
                         .read().split()[-1].strip())
     except Exception as e:
         print('Exception', e)
-        start = 128100
-    done = open('done_pc_' + str(thread_num) + '.txt', 'a')
+        start = 136291
+    done = open('done_laptop_' + str(thread_num) + '.txt', 'a')
 
-    outfile = open('dawn_articles_pc_' + str(thread_num) +
+    outfile = open('dawn_articles_laptop_' + str(thread_num) +
                    '.json', 'a')
     with printLock:
         print(thread_num, 'Starting with', start)
 
-    while start < 136400:
+    while start > 0:
         try:
             id = start * 10 + thread_num
             page = urllib2.urlopen(base_url + str(id))
@@ -49,7 +49,7 @@ def scrapeArticles(thread_num):
             done.write(str(start))
             done.write('\n')
         time.sleep(random.uniform(1, 5))
-        start += 1
+        start -= 1
 
 
 for i in range(10):
