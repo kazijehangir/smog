@@ -24,6 +24,7 @@ def scrapeArticles(thread_num):
                    '.json', 'a')
     with printLock:
         print(thread_num, 'Starting with', start)
+    delay = 1
 
     while start > 0:
         try:
@@ -43,12 +44,22 @@ def scrapeArticles(thread_num):
             outfile.write('\n')
             done.write(str(start))
             done.write('\n')
+            with printLock:
+                print(thread_num, 'got', id)
+            delay = 1
         except Exception as e:
             with printLock:
-                print(id, 'Exception', e)
-            continue
-
-        time.sleep(random.uniform(1, 5))
+                try:
+                    print(id, 'Exception', e, e.code, e.reason)
+                    if e.code == 403:
+                        start += 1
+                        delay += 1
+                except Exception as e2:
+                    print (id, 'Exception', e)
+                    continue
+        with printLock:
+            print(thread_num, 'sleeping with delay', delay)
+        time.sleep(random.uniform(5 * delay, 10 * delay))
         start -= 1
 
 
