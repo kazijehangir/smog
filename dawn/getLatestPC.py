@@ -17,7 +17,7 @@ def scrapeArticles(thread_num):
                         .read().split()[-1].strip())
     except Exception as e:
         print('Exception', e)
-        start = 128100
+        start = 128113
     done = open('done_pc_' + str(thread_num) + '.txt', 'a')
 
     outfile = open('dawn_articles_pc_' + str(thread_num) +
@@ -36,8 +36,8 @@ def scrapeArticles(thread_num):
             author = soup.find('span', attrs={'class': 'story__byline'}).text
             date = soup.find('span', attrs={'class': 'story__time'}).text
         except Exception as e:
-            # with printLock:
-            #     print('Exception', e)
+            with printLock:
+                print(id, 'Exception', e)
             continue
 
         json.dump(
@@ -45,9 +45,10 @@ def scrapeArticles(thread_num):
                 'date': date}},
             outfile)
         outfile.write('\n')
-        if start % 10 == 0:
-            done.write(str(start))
-            done.write('\n')
+        done.write(str(start))
+        done.write('\n')
+        with printLock:
+            print(thread_num, 'got', id)
         time.sleep(random.uniform(1, 5))
         start += 1
 

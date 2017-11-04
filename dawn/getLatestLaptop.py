@@ -45,9 +45,8 @@ def scrapeArticles(thread_num):
                 'date': date}},
             outfile)
         outfile.write('\n')
-        if start % 10 == 0:
-            done.write(str(start))
-            done.write('\n')
+        done.write(str(start))
+        done.write('\n')
         time.sleep(random.uniform(1, 5))
         start -= 1
 
