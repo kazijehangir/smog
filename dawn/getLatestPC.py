@@ -35,21 +35,25 @@ def scrapeArticles(thread_num):
             title = soup.find('h2', attrs={'class': 'story__title'}).text
             author = soup.find('span', attrs={'class': 'story__byline'}).text
             date = soup.find('span', attrs={'class': 'story__time'}).text
+            json.dump(
+                {id: {'article': article, 'title': title, 'author': author,
+                    'date': date}},
+                outfile)
+            outfile.write('\n')
+            done.write(str(start))
+            done.write('\n')
+            with printLock:
+                print(thread_num, 'got', id)
         except Exception as e:
             with printLock:
-                print(id, 'Exception', e)
-            continue
+                try:
+                    print(id, 'Exception', e, e.code, e.reason)
+                except Exception as e2:
+                    print (id, 'Exception', e)
+                    continue
 
-        json.dump(
-            {id: {'article': article, 'title': title, 'author': author,
-                'date': date}},
-            outfile)
-        outfile.write('\n')
-        done.write(str(start))
-        done.write('\n')
-        with printLock:
-            print(thread_num, 'got', id)
-        time.sleep(random.uniform(1, 5))
+        
+        time.sleep(random.uniform(1, 10))
         start += 1
 
 
