@@ -20,17 +20,31 @@ def validDate(date):
     return False
 
 all_articles = {}
-articles = open('dawn_articles.json', 'r').read().strip().split('\n')
-for article in articles:
-    try:
-        # print('JSON loading: ', prof.strip())
-        article = json.loads(article.strip())
-        # print('JSON: ', prof)
-        for k in article.keys():
-            all_articles[k] = article[k]
-    except Exception as e:
-        print('Excpetion:', e)
-        continue
+for i in range(10):
+    filename = 'dawn_articles_pc_' + str(i) + '.json'
+    articles = open(filename, 'r').read().strip().split('\n')
+    for article in articles:
+        try:
+            # print('JSON loading: ', prof.strip())
+            article = json.loads(article.strip())
+            # print('JSON: ', prof)
+            for k in article.keys():
+                all_articles[k] = article[k]
+        except Exception as e:
+            print(i, 'Exception:', e)
+            continue
+    filename = 'dawn_articles_laptop_' + str(i) + '.json'
+    articles = open(filename, 'r').read().strip().split('\n')
+    for article in articles:
+        try:
+            # print('JSON loading: ', prof.strip())
+            article = json.loads(article.strip())
+            # print('JSON: ', prof)
+            for k in article.keys():
+                all_articles[k] = article[k]
+        except Exception as e:
+            print(i, 'Exception:', e)
+            continue
 
 allPostsOutput = open('allArticles.json', 'w')
 json.dump(all_articles, allPostsOutput)
