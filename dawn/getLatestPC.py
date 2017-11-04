@@ -28,7 +28,8 @@ def scrapeArticles(thread_num):
     while start < 136400:
         try:
             id = start * 10 + thread_num
-            page = urllib2.urlopen(base_url + str(id))
+            request = urllib2.Request(base_url + str(id), headers={'User-Agent': 'Mozilla/5.0'})
+            page = urllib2.urlopen(request)
             soup = BeautifulSoup(page, 'html.parser')
 
             article = soup.find('div', attrs={'class': 'story__content'}).text
@@ -55,9 +56,10 @@ def scrapeArticles(thread_num):
                 except Exception as e2:
                     print (id, 'Exception', e)
                     continue
+        sleep = random.uniform(2.5 ** delay, 4 ** delay)
         with printLock:
-            print(thread_num, 'sleeping with delay', delay)
-        time.sleep(random.uniform(5 * delay, 10 * delay))
+            print(thread_num, 'sleeping with delay', delay, sleep)
+        time.sleep(sleep)
         start += 1
 
 
