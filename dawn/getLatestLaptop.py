@@ -14,11 +14,11 @@ def scrapeArticles(thread_num):
         print('Starting thread', thread_num)
     try:
         start = int(open('done_laptop_' + str(thread_num) + '.txt', 'r')
-                        .read().split()[-1].strip())
+                    .read().split()[-1].strip())
     except Exception as e:
         print('Exception', e)
         start = 136271
-    done = open('done_laptop_' + str(thread_num) + '.txt', 'a')
+    done = open('done_laptop_' + str(thread_num) + '.txt', 'a', 0)
 
     outfile = open('dawn_articles_laptop_' + str(thread_num) +
                    '.json', 'a')
@@ -29,7 +29,9 @@ def scrapeArticles(thread_num):
     while start > 0:
         try:
             id = start * 10 + thread_num
-            page = urllib2.urlopen(base_url + str(id))
+            request = urllib2.Request(base_url + str(id),
+                                      headers={'User-Agent': 'Mozilla/5.0'})
+            page = urllib2.urlopen(request)
             soup = BeautifulSoup(page, 'html.parser')
 
             article = soup.find('div', attrs={'class': 'story__content'}).text
@@ -39,7 +41,7 @@ def scrapeArticles(thread_num):
 
             json.dump(
                 {id: {'article': article, 'title': title, 'author': author,
-                    'date': date}},
+                      'date': date}},
                 outfile)
             outfile.write('\n')
             done.write(str(start))
@@ -57,9 +59,10 @@ def scrapeArticles(thread_num):
                 except Exception as e2:
                     print (id, 'Exception', e)
                     continue
+        sleep = random.uniform(2.5 ** delay, 4 ** delay)
         with printLock:
-            print(thread_num, 'sleeping with delay', delay)
-        time.sleep(random.uniform(5 * delay, 10 * delay))
+            print(thread_num, 'sleeping with delay', delay, sleep)
+        time.sleep(sleep)
         start -= 1
 
 
