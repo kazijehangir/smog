@@ -49,14 +49,14 @@ def scrapeArticles(thread_num):
         except Exception as e:
             with printLock:
                 try:
-                    print(id, 'Exception', e, e.code, e.reason)
                     if e.code == 403:
                         start -= 1
                         delay += 1
+                        print(id, thread_num, 'Exception', e, e.code, e.reason)
                 except Exception as e2:
-                    print (id, 'Exception', e)
+                    # print (id, 'Exception', e)
                     continue
-        sleep = random.uniform(2.5 ** delay, 4 ** delay)
+        sleep = random.uniform(5 * delay, 15 * delay)
         with printLock:
             print(thread_num, 'sleeping with delay', delay, sleep)
         time.sleep(sleep)
